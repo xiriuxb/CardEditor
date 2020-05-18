@@ -51,7 +51,7 @@ public class GetFromURL {
         return newsHeadlines.text();
     }
     
-    public ArrayList getAttrib(String carta) throws IOException {
+    public ArrayList<String> getAttrib(String carta) throws IOException {
         ArrayList<String> datos = new ArrayList<>();
         Document doc = Jsoup.connect(correctURL("https://yugioh.fandom.com/es/wiki/"+carta.replace(":", ""))).get();
         Elements newsHeadlines = doc.select(".pi-item .pi-data-value div");

@@ -10,11 +10,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.JOptionPane;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -65,22 +60,19 @@ public class Base {
 		
     }
     
-    public Object[] getCampo(String campo) throws IOException, ParseException{
+    public ArrayList<String> getCampo(String campo) throws IOException, ParseException{
     	ArrayList<String> datosDeCampo = new ArrayList<>();
-    	System.out.println("==============");
     	try {
 			readJSON();
 			arrayJSON.forEach( (t) -> {
 				JSONObject name = (JSONObject) t;
-				System.out.println(name.get(campo));
 				datosDeCampo.add((String) name.get(campo));
 			});
-			return datosDeCampo.toArray();
+			return datosDeCampo;
 		} catch (NullPointerException e) {
 			System.err.println("Looool");
-			return datosDeCampo.toArray();
+			return datosDeCampo;
 		}
-        
     }
     
     public void saveCard(JSONObject card){
@@ -105,4 +97,5 @@ public class Base {
     public JSONObject getCard(int numeroCarta){
         return (JSONObject)getArrayJSON().get(numeroCarta);
     }
+    
 }

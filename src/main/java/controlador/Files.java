@@ -6,11 +6,10 @@
 package controlador;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
-import javax.sound.midi.SysexMessage;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -57,7 +56,7 @@ public class Files {
             return false;
             }
         };
-        tableModel.addColumn("Cartas", db.getCampo(spaName));
+        tableModel.addColumn("Cartas", db.getCampo(spaName).toArray());
         return tableModel;
     }
     
@@ -79,8 +78,8 @@ public class Files {
 			break;
 			
 		case "class javax.swing.JComboBox":
-			if (((JComboBox)jObject).getSelectedItem().toString().equals("")) {
-				((JComboBox)jObject).setBackground(Color.red);
+			if (((JComboBox<?>)jObject).getSelectedItem().toString().equals("")) {
+				((JComboBox<?>)jObject).setBackground(Color.red);
 				error++;
 			}
 			break;
@@ -144,11 +143,11 @@ public class Files {
         };
     }
     
-    public void saveChooser() { 
+    public void saveChooser(Component parent) { 
     	String ruta = "";
     	JFileChooser jFileCh = new JFileChooser("user.home");
     	jFileCh.setFileFilter(filtroParaFChoser());
-    	int userSelection = jFileCh.showSaveDialog(null);
+    	int userSelection = jFileCh.showSaveDialog(parent);
     	if (userSelection == JFileChooser.APPROVE_OPTION) {
     		try {
                 ruta = jFileCh.getSelectedFile().getAbsolutePath()+".json";
@@ -162,15 +161,28 @@ public class Files {
     	}
     }
     
-    public void loadChooser() { 
+    public void loadChooser(Component parent) { 
     	JFileChooser jFileCh = new JFileChooser("user.home");
     	jFileCh.setFileFilter(filtroParaFChoser());
-    	int result = jFileCh.showOpenDialog(null);
+    	int result = jFileCh.showOpenDialog(parent);
         if (result == JFileChooser.APPROVE_OPTION) {
             File selectedFile = jFileCh.getSelectedFile();
             db.setRutaJSONArray(selectedFile.getAbsolutePath());
             this.setRuta(db.getRutaJSONArray());
         }
+    }
+    
+    public boolean verificarSiExiste(String value) {
+    	boolean existe = false;
+    	try {
+			if(db.getCampo(spaName).contains(value)) {
+				existe= true;
+			}
+		} catch (IOException | ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	return existe;
     }
 }
 
